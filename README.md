@@ -14,7 +14,7 @@ This repository contains the desired state of Kubernetes manifests in the form o
 We'll use `kind` short for 'kubernetes in docker' to create a kubernetes cluster within docker. 
 
 ```shell
-$ kind create cluster
+kind create cluster
 ```
 
 Bootstrapping the cluster requires to run the following command two times, in the initial apply some of the custom-resource-definitions aren't present and subsequently the manifests can't be applied. Make sure you're connected to the right kubernetes cluster before executing the command.
