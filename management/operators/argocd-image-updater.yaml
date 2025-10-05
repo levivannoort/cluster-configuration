@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-cd-image-updater
+  namespace: argocd 
+  labels:
+    component: operators
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: operators
+  source:
+    repoURL: https://github.com/levivannoort/cluster-configuration.git
+    path: operators/argo-cd-image-updater
+    targetRevision: main
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
