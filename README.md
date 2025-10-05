@@ -23,18 +23,20 @@ Bootstrapping the cluster requires to run the following command two times, in th
 kubectx <cluster>
 ```
 
-### bootstrapping | user authentication
+### bootstrap | user-authentication
 
 Ingest the secret used for authentication by argocd towards the source code management provider, in this case `github`. For this we use a github OAuth application, navigate to `Settings` > `Developer settings` > `OAuth Apps` and create a new application. The important configuration option is the `Authorization callback URL`, which we'll set to `https://localhost:8080/api/dex/callback` - a port that is going to be exposed soon.
 
 After creation of the OAuth application it will present a client id. In addition we'll generate a client secret. These values will be used when creating a secret that is going to be used in the following command:
+
+Option 1: command-line secret creation:
 
 ```shell
 kubectl create namespace argocd
 ```
 
 ```shell
-kubectl create secret generic github \
+kubectl create secret generic user-authentication \
 --namespace=argocd \
 --from-literal=clientId=<client-id> \
 --from-literal=clientSecret=<client-secret>
@@ -43,19 +45,29 @@ kubectl create secret generic github \
 An example of the to be created secret can be seen below:
 
 ```shell
-kubectl create secret generic github \
+kubectl create secret generic user-authentication \
 --namespace=argocd \
 --from-literal=clientId=1234567890abcdefghij \
 --from-literal=clientSecret=1234567890abcdefghij1234567890abcdefghij
 ```
 
 ```shell
-kubectl label secret github --namespace argocd app.kubernetes.io/part-of=argocd
+kubectl label secret user-authentication --namespace argocd app.kubernetes.io/part-of=argocd
 ```
 
-The secret we just created will be used by the file that can be found at the following path: `management/argocd-configmap.yaml`.
+Option 2: apply secret template object
 
-### bootstrapping | apply
+Alternatively apply the template object for the secret can be found within the `authentication` directory called `user-authentication-secret.yaml` - replace the keys with `< >`:
+
+```shell
+kubectl apply -f authentication/user-authentication-secret.yaml
+```
+
+The secret we just created will be used by the file that can be found at the following path: `management/argocd-configmap.yaml`. 
+
+[1]: https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#2-configure-argo-cd-for-sso
+
+### bootstrap | apply
 
 The configuration for the bootstrap is now present and we apply the initial configuration for the cluster by using kubectl with the kustomize option - run the command twice, as the first time the custom resource definition for the application won't be present:
 

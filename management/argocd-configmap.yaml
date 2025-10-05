@@ -11,5 +11,5 @@ data:
         id: github
         name: GitHub
         config:
-          clientID: $github:clientId
-          clientSecret: $github:clientSecret
+          clientID: $user-authentication:clientId
+          clientSecret: $user-authentication:clientSecret
