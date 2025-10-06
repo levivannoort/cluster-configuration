@@ -3,4 +3,7 @@ kind: Kustomization
 namespace: argocd
 
 resources:
- - argo-workflows.yaml
+  - loki.yaml
+  - prometheus.yaml
+  - grafana.yaml
+  - kyverno.yaml
