@@ -9,9 +9,9 @@ resources:
   - argocd-application.yaml
   - argocd-projects.yaml
   - argocd-repositories.yaml
-  - argocd-rbac-configmap.yaml
   - applications/
   - operators/
 
 patches:
   - path: argocd-configmap.yaml
+  - path: argocd-rbac-configmap.yaml
