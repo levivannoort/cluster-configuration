@@ -128,7 +128,7 @@ spec:
       prune: true
 ```
 
-## rendering | applications
+## rendering | operators
 
 Add the file that is being rendered within the kustomize configuration. This is an argocd application that points to the `operators/<operator>` folder in the root of the repository. This allows us to render the operator to the cluster by using a helm chart or a set of kustomize files.
 
