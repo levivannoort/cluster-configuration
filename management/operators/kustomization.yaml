@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: argocd
 
 resources:
-  - loki.yaml
   - prometheus.yaml
   - grafana.yaml
   - kyverno.yaml
+  - traefik.yaml
