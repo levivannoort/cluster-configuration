@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argocd
+  labels:
+    component: operators
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: operators
+  source:
+    repoURL: https://github.com/levivannoort/cluster-configuration.git
+    path: operators/cilium
+    targetRevision: main
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=false
+      - Replace=true
+    automated:
+      selfHeal: true
+      prune: true

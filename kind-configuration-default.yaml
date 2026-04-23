@@ -1,7 +1,10 @@
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
-name: kind-cc-default
+name: levivannoort
 nodes:
-  - role: control-plane
-  - role: worker
-  - role: worker
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+networking:
+  disableDefaultCNI: true

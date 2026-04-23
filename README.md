@@ -10,10 +10,10 @@ This repository contains the desired state of Kubernetes manifests in the form o
 
 ## bootstrapping
 
-We'll use `kind` short for 'kubernetes in docker' to create a kubernetes cluster within docker. 
+We'll use `kind` short for 'kubernetes in docker' to create a kubernetes cluster within docker.
 
 ```shell
-kind create cluster
+make default
 ```
 
 Make sure you're connected to the right kubernetes cluster before executing the command.
@@ -22,7 +22,7 @@ Make sure you're connected to the right kubernetes cluster before executing the 
 kubectx <cluster>
 ```
 
-### bootstrap | user-authentication
+### bootstrap | authentication
 
 Ingest the secret used for authentication by argocd towards the source code management provider, in this case `github`. For this we use a github OAuth application, navigate to `Settings` > `Developer settings` > `OAuth Apps` and create a new application. The important configuration option is the `Authorization callback URL`, which we'll set to `https://localhost:8080/api/dex/callback` - a port that is going to be exposed soon.
 
@@ -66,10 +66,6 @@ The secret we just created will be used by the file that can be found at the fol
 
 [1]: https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#2-configure-argo-cd-for-sso
 
-### bootstrap | scm-authentication
-
-
-
 ### bootstrap | apply
 
 The configuration for the bootstrap is now present and we apply the initial configuration for the cluster by using kubectl with the kustomize option - requires to run the following command two times, in the initial apply some of the custom-resource-definitions aren't present and subsequently the manifests can't be applied:
@@ -91,6 +87,7 @@ Login through the previously setup 0Auth application by pressing the 'Log in via
 When rendering or unrendering a specific application or operators we add or remove an index from the list within `resources`, in the example below the kyverno operator is being rendered into the cluster.
 
 `management/[ application | operator ]/kustomization.yaml`
+
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
@@ -105,6 +102,7 @@ resources:
 Add the file that is being rendered within the kustomize configuration. This is an argocd application that points to the `applications/<application>` folder in the root of the repository. This allows us to render the application to the cluster by using a helm chart or a set of kustomize files.
 
 `management/applications/<application>.yaml`
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -137,6 +135,7 @@ spec:
 Add the file that is being rendered within the kustomize configuration. This is an argocd application that points to the `operators/<operator>` folder in the root of the repository. This allows us to render the operator to the cluster by using a helm chart or a set of kustomize files.
 
 `management/operators/<operator>.yaml`
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application

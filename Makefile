@@ -1,25 +1,25 @@
-.PHONY: all default cilium clean
+.PHONY: all default clean help
 
-CLUSTER_NAME ?= cc
-KUBE_VERSION ?= v1.34.0
-CILIUM_VERSION ?= 1.18.4
+CLUSTER_NAME ?= levivannoort
+CILIUM_VERSION ?= 1.19.3
+ARGOCD_VERSION ?= v3.3.8
 
-all: kind-default
+all: default
 
-kind-default: kind-configuration-default.yaml
+default: kind-configuration-default.yaml
 	kind create cluster --name $(CLUSTER_NAME)-default --config kind-configuration-default.yaml
 	kubectl cluster-info --context kind-$(CLUSTER_NAME)-default
-
-kind-cilium: kind-configuration-cilium.yaml
-	kind create cluster --name $(CLUSTER_NAME)-cilium --config kind-configuration-cilium.yaml
-	kubectl cluster-info --context kind-$(CLUSTER_NAME)-cilium
+	cilium install --version 1.19.3
+	kubectl apply -k management --server-side --context kind-$(CLUSTER_NAME)-default || true
+	kubectl wait --for=condition=established crd/applications.argoproj.io --timeout=60s --context kind-$(CLUSTER_NAME)-default
+	kubectl apply -k management --server-side --context kind-$(CLUSTER_NAME)-default
+	kubectl wait --for=condition=available deployment/argocd-server -n argocd --timeout=300s --context kind-$(CLUSTER_NAME)-default
 
 clean:
-	kind delete cluster --name kind-$(CLUSTER_NAME)-default || true
-	kind delete cluster --name kind-$(CLUSTER_NAME)-cilium || true
+	kind delete cluster --name $(CLUSTER_NAME)-default || true
 
 help:
 	@echo "Usage:"
-	@echo "  make kind-default - Create a kind cluster with default CNI (name: kind)"
-	@echo "  make kind-cilium  - Create a kind cluster with Cilium CNI (name: kind-cilium)"
-	@echo "  make clean        - Delete both default and Cilium kind clusters"
+	@echo "  make all                     - Create cluster, install Cilium and bootstrap argocd"
+	@echo "  make kind-default            - Create a kind cluster with default configuration"
+	@echo "  make clean                   - Delete the kind cluster"
