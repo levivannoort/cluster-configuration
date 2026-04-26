@@ -6,4 +6,4 @@ version: 0.0.0
 dependencies:
   - name: feed
     version: 1.0.1
-    repository: https://kontrolplane.github.io/helm-charts
+    repository: oci://ghcr.io/kontrolplane/helm-charts
