@@ -1,0 +1,35 @@
+feed:
+  config:
+    refreshInterval: "15m"
+    markReadOn: "open"
+    retention: "30d"
+    density: "default"
+    debug: false
+    seed: false
+
+  database:
+    driver: postgres
+
+  cnpg:
+    enabled: true
+    instances: 1
+    image:
+      repository: ghcr.io/cloudnative-pg/postgresql
+      tag: "17"
+    database: feed
+    owner: feed
+    storage:
+      size: 5Gi
+
+  httpRoute:
+    enabled: true
+    parentRefs:
+      - name: gateway
+        sectionName: http
+    hostnames:
+      - feed.kontrolplane.dev
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
