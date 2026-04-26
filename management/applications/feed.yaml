@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: feed
+  namespace: argocd 
+  labels:
+    component: applications
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: applications
+  source:
+    repoURL: https://github.com/levivannoort/cluster-configuration.git
+    path: applications/feed
+    targetRevision: main
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: feed
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
