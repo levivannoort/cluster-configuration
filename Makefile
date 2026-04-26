@@ -1,10 +1,10 @@
-.PHONY: all default clean help
+.PHONY: all cluster configure help
 
 CLUSTER_NAME ?= levivannoort
 CILIUM_VERSION ?= 1.19.3
 ARGOCD_VERSION ?= v3.3.8
 
-all: configure
+all: cluster configure
 
 cluster:
 	kind create cluster --name $(CLUSTER_NAME)-default --config kind-configuration-default.yaml

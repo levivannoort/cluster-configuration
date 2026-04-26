@@ -13,7 +13,7 @@ This repository contains the desired state of Kubernetes manifests in the form o
 We'll use `kind` short for 'kubernetes in docker' to create a kubernetes cluster within docker.
 
 ```shell
-make default
+make cluster
 ```
 
 Make sure you're connected to the right kubernetes cluster before executing the command.
@@ -71,7 +71,7 @@ The secret we just created will be used by the file that can be found at the fol
 The configuration for the bootstrap is now present and we apply the initial configuration for the cluster by using kubectl with the kustomize option - requires to run the following command two times, in the initial apply some of the custom-resource-definitions aren't present and subsequently the manifests can't be applied:
 
 ```shell
-kubectl apply -k management/
+make configuration
 ```
 
 To access the cluster we'll add a portforward to the local cluster to be able to access the argocd interface.
