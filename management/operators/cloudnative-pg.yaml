@@ -15,7 +15,7 @@ spec:
     targetRevision: main
   destination:
     server: https://kubernetes.default.svc
-    namespace: cloudnative-pg
+    namespace: cnpg-system
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
