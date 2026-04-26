@@ -4,10 +4,12 @@ CLUSTER_NAME ?= levivannoort
 CILIUM_VERSION ?= 1.19.3
 ARGOCD_VERSION ?= v3.3.8
 
-all: default
+all: configure
 
-default: kind-configuration-default.yaml
+cluster:
 	kind create cluster --name $(CLUSTER_NAME)-default --config kind-configuration-default.yaml
+
+configure:
 	kubectl cluster-info --context kind-$(CLUSTER_NAME)-default
 	cilium install --version 1.19.3
 	kubectl apply -k management --server-side --context kind-$(CLUSTER_NAME)-default || true
@@ -21,5 +23,6 @@ clean:
 help:
 	@echo "Usage:"
 	@echo "  make all                     - Create cluster, install Cilium and bootstrap argocd"
-	@echo "  make kind-default            - Create a kind cluster with default configuration"
+	@echo "  make cluster                 - Create a kind cluster with default configuration"
+	@echo "  make configure                - Install Cilium and bootstrap argocd"
 	@echo "  make clean                   - Delete the kind cluster"
