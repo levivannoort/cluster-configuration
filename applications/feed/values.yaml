@@ -1,4 +1,8 @@
 feed:
+  image
+    repository: ghcr.io/kontrolplane/feed
+    tag: 1.0.0
+
   config:
     refreshInterval: "15m"
     markReadOn: "open"
