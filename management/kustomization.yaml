@@ -5,6 +5,7 @@ namespace: argocd
   
 resources:
   - https://github.com/argoproj/argo-cd/manifests/cluster-install?ref=v3.1.8
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/standard-install.yaml
   - argocd-namespace.yaml
   - argocd-application.yaml
   - argocd-projects.yaml
