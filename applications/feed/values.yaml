@@ -3,6 +3,14 @@ feed:
     repository: "ghcr.io/kontrolplane/feed"
     tag: "1.0.0"
 
+  feeds:
+    - folder: tech
+      feeds:
+        - title: hacker news
+          url: https://news.ycombinator.com/rss
+        - title: cncf
+          url: https://www.cncf.io/feed
+
   config:
     refreshInterval: "15m"
     markReadOn: "open"
@@ -26,7 +34,7 @@ feed:
       size: 5Gi
 
   httpRoute:
-    enabled: true
+    enabled: false
     parentRefs:
       - name: gateway
         sectionName: http
